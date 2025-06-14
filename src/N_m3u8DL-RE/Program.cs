@@ -250,7 +250,7 @@ internal class Program
                 return true;
             }, maxRetries: option.WebRequestRetryCount);
         }
-        catch (HTTPUtil.NonRetryableHttpException ex)
+        catch (NonRetryableHttpException ex)
         {
             Logger.ErrorMarkUp($"[red]访问链接失败: {ex.Message}[/]");
             Logger.ErrorMarkUp($"[red]HTTP状态码 {(int)ex.StatusCode} ({ex.StatusCode}) 表示请求无法成功，已停止重试[/]");

@@ -3,28 +3,25 @@ using System.Net.Http.Headers;
 using N_m3u8DL_RE.Common.Log;
 using N_m3u8DL_RE.Common.Resource;
 
-namespace N_m3u8DL_RE.Common.Util
+namespace N_m3u8DL_RE.Common.Util;
+
+/// <summary>
+/// 表示不应重试的HTTP异常（如401、403、404等状态码）
+/// </summary>
+public class NonRetryableHttpException : Exception
 {
-    /// <summary>
-    /// 表示不应重试的HTTP异常（如401、403、404等状态码）
-    /// </summary>
-    public class NonRetryableHttpException : Exception
+    public HttpStatusCode StatusCode { get; }
+    
+    public NonRetryableHttpException(HttpStatusCode statusCode, string message) : base(message)
     {
-        public HttpStatusCode StatusCode { get; }
-        
-        public NonRetryableHttpException(HttpStatusCode statusCode, string message) : base(message)
-        {
-            StatusCode = statusCode;
-        }
-        
-        public NonRetryableHttpException(HttpStatusCode statusCode, string message, Exception innerException) : base(message, innerException)
-        {
-            StatusCode = statusCode;
-        }
+        StatusCode = statusCode;
+    }
+    
+    public NonRetryableHttpException(HttpStatusCode statusCode, string message, Exception innerException) : base(message, innerException)
+    {
+        StatusCode = statusCode;
     }
 }
-
-namespace N_m3u8DL_RE.Common.Util;
 
 public static class HTTPUtil
 {
