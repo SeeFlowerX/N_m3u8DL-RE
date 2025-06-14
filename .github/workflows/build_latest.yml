@@ -123,6 +123,11 @@ jobs:
       
       - name: Install dependencies and .NET SDK
         run: |
+          # Set timezone to avoid interactive configuration
+          export DEBIAN_FRONTEND=noninteractive
+          export TZ=UTC
+          ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+          
           apt-get update
           apt-get install -y curl wget build-essential clang llvm zlib1g-dev libicu-dev libcurl4-openssl-dev libkrb5-dev ca-certificates gnupg
           
