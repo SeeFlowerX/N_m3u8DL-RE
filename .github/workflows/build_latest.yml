@@ -24,7 +24,7 @@ env:
 
 jobs:
   set-date:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     outputs:
       date: ${{ steps.get_date.outputs.date }}
       tag: ${{ steps.format_tag.outputs.tag }}
@@ -114,7 +114,7 @@ jobs:
           path: N_m3u8DL-RE_${{ needs.set-date.outputs.tag }}_win-arm64_${{ needs.set-date.outputs.date }}.zip
 
   build-linux-x64-arm64:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs: set-date
 
     steps:
@@ -177,8 +177,8 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_SDK_VERSION }}
       
-      - run: dotnet publish src/N_m3u8DL-RE -r linux-x64 -c Release -o artifact -p:PublishAot=true -p:StripSymbols=true
-      - run: dotnet publish src/N_m3u8DL-RE -r linux-arm64 -c Release -o artifact-arm64 -p:PublishAot=true -p:StripSymbols=true
+      - run: dotnet publish src/N_m3u8DL-RE -r linux-x64 -c Release -o artifact
+      - run: dotnet publish src/N_m3u8DL-RE -r linux-arm64 -c Release -o artifact-arm64
 
       - name: Package [linux]
         run: |
@@ -245,7 +245,7 @@ jobs:
           path: N_m3u8DL-RE_${{ needs.set-date.outputs.tag }}_android-bionic-arm64_${{ needs.set-date.outputs.date }}.tar.gz
 
   build-linux-musl-x64:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs: set-date
     container: mcr.microsoft.com/dotnet/sdk:9.0-alpine-amd64
 
@@ -267,7 +267,7 @@ jobs:
           path: N_m3u8DL-RE_${{ needs.set-date.outputs.tag }}_linux-musl-x64_${{ needs.set-date.outputs.date }}.tar.gz
 
   build-linux-musl-arm64:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs: set-date
     container: mcr.microsoft.com/dotnet-buildtools/prereqs:ubuntu-22.04-cross-arm64-alpine
 
@@ -329,7 +329,7 @@ jobs:
 
   create_release:
     name: Create release
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     permissions:
       contents: write
     if: ${{ github.event.inputs.doRelease == 'true' }}
