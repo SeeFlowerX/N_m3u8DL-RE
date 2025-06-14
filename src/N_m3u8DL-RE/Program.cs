@@ -242,11 +242,20 @@ internal class Program
         // 流提取器配置
         var extractor = new StreamExtractor(parserConfig);
         // 从链接加载内容
-        await RetryUtil.WebRequestRetryAsync(async () =>
+        try
         {
-            await extractor.LoadSourceFromUrlAsync(url);
-            return true;
-        }, maxRetries: option.WebRequestRetryCount);
+            await RetryUtil.WebRequestRetryAsync(async () =>
+            {
+                await extractor.LoadSourceFromUrlAsync(url);
+                return true;
+            }, maxRetries: option.WebRequestRetryCount);
+        }
+        catch (HTTPUtil.NonRetryableHttpException ex)
+        {
+            Logger.ErrorMarkUp($"[red]访问链接失败: {ex.Message}[/]");
+            Logger.ErrorMarkUp($"[red]HTTP状态码 {(int)ex.StatusCode} ({ex.StatusCode}) 表示请求无法成功，已停止重试[/]");
+            throw new Exception($"无法访问链接 {url}: HTTP {(int)ex.StatusCode} {ex.StatusCode}", ex);
+        }
         // 解析流信息
         var streams = await extractor.ExtractStreamsAsync();
 

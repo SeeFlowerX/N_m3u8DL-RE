@@ -3,6 +3,27 @@ using System.Net.Http.Headers;
 using N_m3u8DL_RE.Common.Log;
 using N_m3u8DL_RE.Common.Resource;
 
+namespace N_m3u8DL_RE.Common.Util
+{
+    /// <summary>
+    /// 表示不应重试的HTTP异常（如401、403、404等状态码）
+    /// </summary>
+    public class NonRetryableHttpException : Exception
+    {
+        public HttpStatusCode StatusCode { get; }
+        
+        public NonRetryableHttpException(HttpStatusCode statusCode, string message) : base(message)
+        {
+            StatusCode = statusCode;
+        }
+        
+        public NonRetryableHttpException(HttpStatusCode statusCode, string message, Exception innerException) : base(message, innerException)
+        {
+            StatusCode = statusCode;
+        }
+    }
+}
+
 namespace N_m3u8DL_RE.Common.Util;
 
 public static class HTTPUtil
@@ -66,6 +87,15 @@ public static class HTTPUtil
         }
         // 手动将跳转后的URL设置进去, 用于后续取用
         webResponse.Headers.Location = new Uri(url);
+        
+        // 检查是否为不可重试的状态码
+        if (IsNonRetryableStatusCode(webResponse.StatusCode))
+        {
+            Logger.ErrorMarkUp($"[red]HTTP {(int)webResponse.StatusCode} {webResponse.StatusCode}: 请求失败，不进行重试[/]");
+            throw new NonRetryableHttpException(webResponse.StatusCode,
+                $"HTTP {(int)webResponse.StatusCode} {webResponse.StatusCode}: Request failed with non-retryable status code");
+        }
+        
         webResponse.EnsureSuccessStatusCode();
         return webResponse;
     }
@@ -134,5 +164,25 @@ public static class HTTPUtil
         var webResponse = await AppHttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
         htmlCode = await webResponse.Content.ReadAsStringAsync();
         return htmlCode;
+    }
+
+    /// <summary>
+    /// 检查是否为不可重试的HTTP状态码
+    /// </summary>
+    /// <param name="statusCode">HTTP状态码</param>
+    /// <returns>如果不可重试返回true，否则返回false</returns>
+    private static bool IsNonRetryableStatusCode(HttpStatusCode statusCode)
+    {
+        return statusCode switch
+        {
+            HttpStatusCode.Unauthorized => true,        // 401
+            HttpStatusCode.Forbidden => true,           // 403
+            HttpStatusCode.NotFound => true,            // 404
+            HttpStatusCode.TooManyRequests => true,     // 429
+            HttpStatusCode.InternalServerError => true, // 500
+            HttpStatusCode.BadGateway => true,          // 502
+            HttpStatusCode.ServiceUnavailable => true,  // 503
+            _ => false
+        };
     }
 }

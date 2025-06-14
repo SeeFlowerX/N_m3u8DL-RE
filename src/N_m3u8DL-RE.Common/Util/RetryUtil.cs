@@ -21,6 +21,12 @@ public static class RetryUtil
             }
             catch (Exception ex) when (ex is WebException or IOException or HttpRequestException)
             {
+                // 如果是不可重试的HTTP异常，直接抛出
+                if (ex is NonRetryableHttpException)
+                {
+                    throw;
+                }
+                
                 currentException = ex;
                 retryCount++;
                 Logger.WarnMarkUp($"[grey]{ex.Message.EscapeMarkup()} ({retryCount}/{maxRetries})[/]");
