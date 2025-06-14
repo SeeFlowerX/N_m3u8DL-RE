@@ -77,6 +77,10 @@ internal class MyOption
     /// </summary>
     public int DownloadRetryCount { get; set; }
     /// <summary>
+    /// See: <see cref="CommandInvoker.WebRequestRetryCount"/>.
+    /// </summary>
+    public int WebRequestRetryCount { get; set; }
+    /// <summary>
     /// See: <see cref="CommandInvoker.HttpRequestTimeout"/>.
     /// </summary>
     public double HttpRequestTimeout { get; set; }

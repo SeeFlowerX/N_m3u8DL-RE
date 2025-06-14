@@ -44,6 +44,7 @@ internal static partial class CommandInvoker
     private static readonly Option<bool> SubOnly = new(["--sub-only"], description: ResString.cmd_subOnly, getDefaultValue: () => false);
     private static readonly Option<int> ThreadCount = new(["--thread-count"], description: ResString.cmd_threadCount, getDefaultValue: () => Environment.ProcessorCount) { ArgumentHelpName = "number" };
     private static readonly Option<int> DownloadRetryCount = new(["--download-retry-count"], description: ResString.cmd_downloadRetryCount, getDefaultValue: () => 3) { ArgumentHelpName = "number" };
+    private static readonly Option<int> WebRequestRetryCount = new(["--web-request-retry-count"], description: ResString.cmd_webRequestRetryCount, getDefaultValue: () => 10) { ArgumentHelpName = "number" };
     private static readonly Option<double> HttpRequestTimeout = new(["--http-request-timeout"], description: ResString.cmd_httpRequestTimeout, getDefaultValue: () => 100) { ArgumentHelpName = "seconds" };
     private static readonly Option<bool> SkipMerge = new(["--skip-merge"], description: ResString.cmd_skipMerge, getDefaultValue: () => false);
     private static readonly Option<bool> SkipDownload = new(["--skip-download"], description: ResString.cmd_skipDownload, getDefaultValue: () => false);
@@ -556,6 +557,7 @@ internal static partial class CommandInvoker
                 FFmpegBinaryPath = bindingContext.ParseResult.GetValueForOption(FFmpegBinaryPath),
                 KeyTextFile = bindingContext.ParseResult.GetValueForOption(KeyTextFile),
                 DownloadRetryCount = bindingContext.ParseResult.GetValueForOption(DownloadRetryCount),
+                WebRequestRetryCount = bindingContext.ParseResult.GetValueForOption(WebRequestRetryCount),
                 HttpRequestTimeout = bindingContext.ParseResult.GetValueForOption(HttpRequestTimeout),
                 BaseUrl = bindingContext.ParseResult.GetValueForOption(BaseUrl),
                 MuxImports = bindingContext.ParseResult.GetValueForOption(MuxImports),
@@ -639,7 +641,7 @@ internal static partial class CommandInvoker
 
         var rootCommand = new RootCommand(VERSION_INFO)
         {
-            Input, TmpDir, SaveDir, SaveName, LogFilePath, BaseUrl, ThreadCount, DownloadRetryCount, HttpRequestTimeout, ForceAnsiConsole, NoAnsiColor,AutoSelect, SkipMerge, SkipDownload, CheckSegmentsCount,
+            Input, TmpDir, SaveDir, SaveName, LogFilePath, BaseUrl, ThreadCount, DownloadRetryCount, WebRequestRetryCount, HttpRequestTimeout, ForceAnsiConsole, NoAnsiColor,AutoSelect, SkipMerge, SkipDownload, CheckSegmentsCount,
             BinaryMerge, UseFFmpegConcatDemuxer, DelAfterDone, NoDateInfo, NoLog, WriteMetaJson, AppendUrlParams, ConcurrentDownload, Headers, /**SavePattern,**/ SubOnly, SubtitleFormat, AutoSubtitleFix,
             FFmpegBinaryPath,
             LogLevel, UILanguage, UrlProcessorArgs, Keys, KeyTextFile, DecryptionEngine, DecryptionBinaryPath, UseShakaPackager, MP4RealTimeDecryption,

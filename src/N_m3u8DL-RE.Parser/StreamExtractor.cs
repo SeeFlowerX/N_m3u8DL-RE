@@ -125,7 +125,7 @@ public class StreamExtractor
         }
     }
 
-    public async Task RefreshPlayListAsync(List<StreamSpec> streamSpecs)
+    public async Task RefreshPlayListAsync(List<StreamSpec> streamSpecs, int maxRetries = 10)
     {
         try
         {
@@ -134,7 +134,7 @@ public class StreamExtractor
             {
                 await extractor.RefreshPlayListAsync(streamSpecs);
                 return true;
-            }, retryDelayMilliseconds: 1000, maxRetries: 5);
+            }, retryDelayMilliseconds: 1000, maxRetries: maxRetries);
         }
         finally
         {

@@ -246,7 +246,7 @@ internal class Program
         {
             await extractor.LoadSourceFromUrlAsync(url);
             return true;
-        });
+        }, maxRetries: option.WebRequestRetryCount);
         // 解析流信息
         var streams = await extractor.ExtractStreamsAsync();
 

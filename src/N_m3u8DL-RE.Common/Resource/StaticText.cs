@@ -214,6 +214,12 @@ internal static class StaticText
             zhTW: "每個分片下載異常時的重試次數",
             enUS: "The number of retries when download segment error"
         ),
+        ["cmd_webRequestRetryCount"] = new TextContainer
+        (
+            zhCN: "网络请求异常时的重试次数",
+            zhTW: "網路請求異常時的重試次數",
+            enUS: "The number of retries when web request error"
+        ),
         ["cmd_httpRequestTimeout"] = new TextContainer
         (
             zhCN: "HTTP请求的超时时间(秒)",

@@ -73,6 +73,7 @@ public static class ResString
     public static string cmd_subtitleFix => GetText("cmd_subtitleFix");
     public static string cmd_threadCount => GetText("cmd_threadCount");
     public static string cmd_downloadRetryCount => GetText("cmd_downloadRetryCount");
+    public static string cmd_webRequestRetryCount => GetText("cmd_webRequestRetryCount");
     public static string cmd_httpRequestTimeout => GetText("cmd_httpRequestTimeout");
     public static string cmd_tmpDir => GetText("cmd_tmpDir");
     public static string cmd_uiLanguage => GetText("cmd_uiLanguage");
