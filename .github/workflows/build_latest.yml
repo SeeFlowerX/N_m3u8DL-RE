@@ -131,11 +131,13 @@ jobs:
           apt-get update
           apt-get install -y curl wget build-essential clang llvm zlib1g-dev libicu-dev libcurl4-openssl-dev libkrb5-dev ca-certificates gnupg
           
-          # Install .NET SDK 9.0
-          wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-          dpkg -i packages-microsoft-prod.deb
-          apt-get update
-          apt-get install -y dotnet-sdk-9.0
+          # Install .NET SDK 9.0 manually (not available in Ubuntu 18.04 repo)
+          wget https://builds.dotnet.microsoft.com/dotnet/Sdk/9.0.101/dotnet-sdk-9.0.101-linux-x64.tar.gz
+          mkdir -p /usr/share/dotnet
+          tar -xzf dotnet-sdk-9.0.101-linux-x64.tar.gz -C /usr/share/dotnet
+          ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet
+          export PATH="/usr/share/dotnet:$PATH"
+          export DOTNET_ROOT="/usr/share/dotnet"
           
       # Setup cross compilation for ARM64
       - name: Setup ARM64 cross compilation
