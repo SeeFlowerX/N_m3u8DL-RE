@@ -24,7 +24,7 @@ env:
 
 jobs:
   set-date:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     outputs:
       date: ${{ steps.get_date.outputs.date }}
       tag: ${{ steps.format_tag.outputs.tag }}
@@ -114,9 +114,9 @@ jobs:
           path: N_m3u8DL-RE_${{ needs.set-date.outputs.tag }}_win-arm64_${{ needs.set-date.outputs.date }}.zip
 
   build-linux-x64-arm64:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     needs: set-date
-    container: ubuntu:20.04
+    container: ubuntu:18.04
 
     steps:
       - uses: actions/checkout@v1
@@ -132,7 +132,7 @@ jobs:
           apt-get install -y curl wget build-essential clang llvm zlib1g-dev libicu-dev libcurl4-openssl-dev libkrb5-dev ca-certificates gnupg
           
           # Install .NET SDK 9.0
-          wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+          wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
           dpkg -i packages-microsoft-prod.deb
           apt-get update
           apt-get install -y dotnet-sdk-9.0
@@ -149,8 +149,8 @@ jobs:
           apt-get update
           apt-get install -y binutils-aarch64-linux-gnu gcc-aarch64-linux-gnu zlib1g-dev:arm64
       
-      - run: dotnet publish src/N_m3u8DL-RE -r linux-x64 -c Release -o artifact -p:PublishAot=true -p:StripSymbols=true
-      - run: dotnet publish src/N_m3u8DL-RE -r linux-arm64 -c Release -o artifact-arm64 -p:PublishAot=true -p:StripSymbols=true
+      - run: dotnet publish src/N_m3u8DL-RE -r linux-x64 -c Release -o artifact
+      - run: dotnet publish src/N_m3u8DL-RE -r linux-arm64 -c Release -o artifact-arm64
 
       - name: Package [linux]
         run: |
@@ -217,7 +217,7 @@ jobs:
           path: N_m3u8DL-RE_${{ needs.set-date.outputs.tag }}_android-bionic-arm64_${{ needs.set-date.outputs.date }}.tar.gz
 
   build-linux-musl-x64:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     needs: set-date
     container: mcr.microsoft.com/dotnet/sdk:9.0-alpine-amd64
 
@@ -239,7 +239,7 @@ jobs:
           path: N_m3u8DL-RE_${{ needs.set-date.outputs.tag }}_linux-musl-x64_${{ needs.set-date.outputs.date }}.tar.gz
 
   build-linux-musl-arm64:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     needs: set-date
     container: mcr.microsoft.com/dotnet-buildtools/prereqs:ubuntu-22.04-cross-arm64-alpine
 
@@ -301,7 +301,7 @@ jobs:
 
   create_release:
     name: Create release
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     permissions:
       contents: write
     if: ${{ github.event.inputs.doRelease == 'true' }}
