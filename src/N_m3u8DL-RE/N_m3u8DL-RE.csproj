@@ -24,4 +24,11 @@
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
   </ItemGroup>
 
+  <!-- 添加这个新的 ItemGroup -->
+  <ItemGroup Condition="'$(LinkStaticSSL)' == 'true'">
+    <!-- 在 Alpine Linux 中，静态库位于 /usr/lib/ -->
+    <StaticLibrary Include="/usr/lib/libssl.a" />
+    <StaticLibrary Include="/usr/lib/libcrypto.a" />
+  </ItemGroup>
+
 </Project>
