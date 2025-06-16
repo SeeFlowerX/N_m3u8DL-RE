@@ -177,8 +177,8 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_SDK_VERSION }}
       
-      - run: dotnet publish src/N_m3u8DL-RE -r linux-x64 -c Release -o artifact
-      - run: dotnet publish src/N_m3u8DL-RE -r linux-arm64 -c Release -o artifact-arm64
+      - run: dotnet publish src/N_m3u8DL-RE -r linux-x64 -c Release -o artifact -p:PublishAot=true -p:StripSymbols=true
+      - run: dotnet publish src/N_m3u8DL-RE -r linux-arm64 -c Release -o artifact-arm64 -p:PublishAot=true -p:StripSymbols=true
 
       - name: Package [linux]
         run: |
