@@ -83,7 +83,7 @@ internal static class LargeSingleFileSplitUtil
         List<Clip> clips = [];
         int index = 0;
         long counter = 0;
-        int perSize = 10 * 1024 * 1024;
+        int perSize = 1 * 1024 * 1024;
         while (fileSize > 0)
         {
             Clip c = new()
