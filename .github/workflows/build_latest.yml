@@ -252,8 +252,8 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - run: apk add clang build-base zlib-dev
-      - run: dotnet publish src/N_m3u8DL-RE -r linux-musl-x64 -c Release -o artifact -p:PublishAot=true -p:StripSymbols=true -p:InvariantGlobalization=true
+      - run: apk add clang build-base zlib-dev openssl-dev
+      - run: dotnet publish src/N_m3u8DL-RE -r linux-musl-x64 -c Release -o artifact -p:PublishAot=true -p:StripSymbols=true -p:NativeLib=ssl -p:NativeLib=crypto -p:InvariantGlobalization=true
 
       - name: Package [linux-musl-x64]
         run: |
